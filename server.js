@@ -1,29 +1,23 @@
-const express = require('express');
-const cors = require('cors');
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import connectDB from "./config/db.js";
+import postRoutes from "./routes/postRoutes.js";
+
+dotenv.config();
+console.log("Loaded MONGO_URI:", process.env.MONGO_URI);
+connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-
 app.use(cors());
 app.use(express.json());
 
-// API test
-app.get('/', (req, res) => {
-    res.json({ message: 'Hello from Express backend!' });
+// Routes
+app.use("/api/posts", postRoutes);
+
+app.get("/", (req, res) => {
+  res.send("API is running...");
 });
 
-// Vi du API posts
-const posts = [
-    { id: 1, title: 'First Post', content: 'This is the content of the first post.' },
-    { id: 2, title: 'Second Post', content: 'This is the content of the second post.' },
-    { id: 3, title: 'Third Post', content: 'This is the content of the third post.' }
-];
-
-app.get('/posts', (req, res) => {
-    res.json(posts);
-});
-
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
