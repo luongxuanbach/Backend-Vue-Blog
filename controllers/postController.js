@@ -3,6 +3,7 @@ import Post from "../models/Post.js";
 // @desc Lấy danh sách bài viết (có phân trang + search)
 export const getPosts = async (req, res) => {
     try {
+        console.log("Get Posts called with query:", req.query);
         const { page = 1, limit = 10, search = "" } = req.query;
 
         const query = search
@@ -40,8 +41,9 @@ export const getPostById = async (req, res) => {
 // @desc Tạo bài viết mới
 export const createPost = async (req, res) => {
     try {
-        const { title, content } = req.body;
-        const post = await Post.create({ title, content });
+        console.log("Create Post called with body:", req.body);
+        const { title, content, author } = req.body;
+        const post = await Post.create({ title, content, author: author || 'Anonymous' });
         res.status(201).json(post);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -51,10 +53,10 @@ export const createPost = async (req, res) => {
 // @desc Cập nhật bài viết
 export const updatePost = async (req, res) => {
     try {
-        const { title, content } = req.body;
+        const { title, content, author } = req.body;
         const post = await Post.findByIdAndUpdate(
             req.params.id,
-            { title, content },
+            { title, content, author: author || 'Anonymous' },
             { new: true }
         );
         if (!post) return res.status(404).json({ message: "Không tìm thấy bài viết" });
