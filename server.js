@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import postRoutes from "./routes/postRoutes.js";
+import authRoutes from "./routes/auth.js";
 
 dotenv.config();
 console.log("Loaded MONGO_URI:", process.env.MONGO_URI);
@@ -14,6 +15,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/posts", postRoutes);
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("API is running...");
